@@ -1,19 +1,19 @@
 import React, { Comment, Component } from 'react';
 // import PropTypes from 'prop-types';
 export class Searchbar extends Component {
-  state = { searchValue: '', }
+  state = { searchValue: '' };
 
   handleSubmit = e => {
     e.preventDefault();
 
     this.props.onSubmit(this.state.searchValue);
+    console.log(this.state.searchValue);
     this.setState({ searchValue: '' });
-  }
-  
-  // handleNameChange = e => {
-  //   console.log(e.carrentTarget.value);
-  //   // this.setState({searchValue : e.carrentTarget.value.toLoverCase()})
-  // }
+  };
+
+  handleNameChange = e => {
+    this.setState({ searchValue: e.currentTarget.value.toLowerCase() });
+  };
 
   render() {
     return (
@@ -26,8 +26,8 @@ export class Searchbar extends Component {
           <input
             className="input"
             type="text"
-            // value={this.state.searchValue}
-            // onChange={this.handleNameChange}
+            value={this.state.searchValue}
+            onChange={this.handleNameChange}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
