@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { Component } from 'react';
-import { Overlay, Container} from './Modal.styled';
+import { Overlay} from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 export class ModalImg extends Component {
