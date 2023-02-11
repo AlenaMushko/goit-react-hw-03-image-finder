@@ -16,6 +16,7 @@ export class App extends Component {
       // this.setState({ status: "pending" });
       const imgs = await fetchSearchImg(searchValue, pageNumber);
       this.setState({ imgs: imgs });
+      console.log(this.state, imgs);
     }
   }
 
@@ -24,26 +25,20 @@ export class App extends Component {
     this.setState({ pageNumber: 1 });
   };
 
-  onLoadMoreClick = pageNumber => {
+  onLoadMoreClick = async (searchValue, pageNumber) => {
+    const { searchValue, pageNumber } = this.state;
     this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
+    const imgs = await fetchSearchImg(searchValue, pageNumber);
     console.log(this.state.pageNumber);
-    console.log(this.state.searchValue); 
-  }
-
-  onClickButton = () => {
-    this.props.onClick(this.state.pageNumber);
-     console.log(this.state.pageNumber);
-  }
-
+    console.log(this.state.searchValue);
+  };
 
   render() {
     return (
       <Container>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery items={this.state.imgs} />
-        <LoadMore
-          onLoadMoreClick={this.onLoadMoreClick}
-        />
+        <LoadMore onClick={this.onLoadMoreClick} />
       </Container>
     );
   }

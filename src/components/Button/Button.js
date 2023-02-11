@@ -1,19 +1,14 @@
 import { Component } from 'react';
 import { Button } from './Button.styled';
 export class LoadMore extends Component {
-  state = {isLoading: false, };
+  state = { isLoading: false };
 
-    render() {
+  render() {
+    const { onClick } = this.props;
     return (
-      <div
-        // onClick={onLoadMoreClick}
-      >
-        <Button type='button' >Load more</Button>
+      <div onClick={onClick}>
+        <Button type="button">Load more</Button>
       </div>
-    )
-  }   
-};
-
-// LoadMore.propTypes = {
-//   onLoadMoreClick: PropTypes.func.isRequired,
-// };
+    );
+  }
+}
