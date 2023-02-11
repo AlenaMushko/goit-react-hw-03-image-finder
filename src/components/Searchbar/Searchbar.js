@@ -1,13 +1,14 @@
-import React, { Comment, Component } from 'react';
-// import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { FcSearch } from 'react-icons/fc';
+import PropTypes from 'prop-types';
+import { SearchBar,  SearchForm, SearchFormButton, SearchFormButtonLabel, SearchFormInput  } from './Searchbar.styled';
 export class Searchbar extends Component {
-  state = { searchValue: '' };
+  state = { searchValue: '', pageNumber: 1, };
 
   handleSubmit = e => {
     e.preventDefault();
 
     this.props.onSubmit(this.state.searchValue);
-    console.log(this.state.searchValue);
     this.setState({ searchValue: '' });
   };
 
@@ -17,13 +18,13 @@ export class Searchbar extends Component {
 
   render() {
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
+      <SearchBar>
+        < SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit" className="button"><FcSearch style={{width:"2.5em", height:"2.5em"}}/>
+            <SearchFormButtonLabel className="button-label">Search</SearchFormButtonLabel>
+          </SearchFormButton>
 
-          <input
+          <SearchFormInput
             className="input"
             type="text"
             value={this.state.searchValue}
@@ -32,8 +33,12 @@ export class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
           />
-        </form>
-      </header>
+        </ SearchForm>
+      </SearchBar>
     );
   }
-}
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func,
+};
