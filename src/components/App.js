@@ -1,5 +1,6 @@
 // import PropTypes from 'prop-types';
 import { Component } from 'react';
+import { ColorRing } from 'react-loader-spinner';
 
 import { Searchbar } from './Searchbar';
 import { fetchSearchImg } from './api';
@@ -8,15 +9,40 @@ import { Container } from '../components/App.styled';
 import { LoadMore } from './Button';
 
 export class App extends Component {
-  state = { searchValue: '', imgs: [], pageNumber: 1, status: 'idle' };
+  state = {
+    searchValue: '',
+    imgs: [],
+    pageNumber: 1,
+    isError: 'idle',
+    isLoading: false,
+    imgsOnPage:0,
+  };
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { searchValue, pageNumber } = this.state;
-    if (prevState.searchValue !== this.state.searchValue) {
-      // this.setState({ status: "pending" });
-      const imgs = await fetchSearchImg(searchValue, pageNumber);
-      this.setState({ imgs: imgs });
-      console.log(this.state, imgs);
+  async componentDidUpdate(_, prevState) {
+    const { searchValue, pageNumber, imgsOnPage } = this.state;
+    try {
+      if (prevState.searchValue !== this.state.searchValue) {
+        this.setState({ isLoading: true });
+        const imgs = await fetchSearchImg(searchValue, pageNumber);
+        this.setState({ imgs: imgs });
+        this.setState({ isLoading: false });
+        this.setState({ imgsOnPage: imgs.length });
+      }
+    } catch (error) {
+      this.setState({ isError: true, isLoading: false });
+      console.log(error);
+    }
+    try {
+      if (prevState.pageNumber !== this.state.pageNumber) {
+        this.setState({ isLoading: true });
+        const imgs = await fetchSearchImg(searchValue, pageNumber);
+        this.setState(state => ({ imgs: [...state.imgs, ...imgs] }));
+        this.setState({ isLoading: false });
+          this.setState({ imgsOnPage: imgs.length });
+      }
+    } catch (error) {
+      this.setState({ isError: true, isLoading: false });
+      console.log(error);
     }
   }
 
@@ -25,20 +51,19 @@ export class App extends Component {
     this.setState({ pageNumber: 1 });
   };
 
-  onLoadMoreClick = async (searchValue, pageNumber) => {
-    const { searchValue, pageNumber } = this.state;
+  onLoadMoreClick = async () => {
     this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
-    const imgs = await fetchSearchImg(searchValue, pageNumber);
-    console.log(this.state.pageNumber);
-    console.log(this.state.searchValue);
+        console.log(this.state.imgsOnPage); 
   };
 
   render() {
+    const { imgs, isLoading, imgsOnPage } = this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        <ImageGallery items={this.state.imgs} />
-        <LoadMore onClick={this.onLoadMoreClick} />
+        {isLoading && <ColorRing />}
+        {imgs.length > 1 && <ImageGallery items={this.state.imgs} />}
+        {imgsOnPage >= 12 && <LoadMore onClick={this.onLoadMoreClick} />}
       </Container>
     );
   }

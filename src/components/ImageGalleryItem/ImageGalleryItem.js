@@ -22,7 +22,6 @@ export class ImageGalleryItem extends Component{
     </GalleryItem >
       {isModalOpen && <ModalImg onClose = { this.closeModal } id = { id } tags = { tags } largeImageURL = { largeImageURL } />  }
    </div>
-        // onClick={() => onImageClick({id, largeImageURL, tags})}
   );
   }
   
