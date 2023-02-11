@@ -25,10 +25,16 @@ export class App extends Component {
   };
 
   onLoadMoreClick = pageNumber => {
-    this.setState({ pageNumber: pageNumber });
+    this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
     console.log(this.state.pageNumber);
-    console.log(this.state.searchValue);
+    console.log(this.state.searchValue); 
   }
+
+  onClickButton = () => {
+    this.props.onClick(this.state.pageNumber);
+     console.log(this.state.pageNumber);
+  }
+
 
   render() {
     return (
@@ -36,7 +42,7 @@ export class App extends Component {
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery items={this.state.imgs} />
         <LoadMore
-          onClick={this.onLoadMoreClick}
+          onLoadMoreClick={this.onLoadMoreClick}
         />
       </Container>
     );
