@@ -19,7 +19,7 @@ export class App extends Component {
   };
 
   async componentDidUpdate(_, prevState) {
-    const { searchValue, pageNumber, imgsOnPage } = this.state;
+    const { searchValue, pageNumber } = this.state;
     try {
       if (prevState.searchValue !== this.state.searchValue) {
         this.setState({ isLoading: true });
@@ -53,7 +53,6 @@ export class App extends Component {
 
   onLoadMoreClick = async () => {
     this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
-        console.log(this.state.imgsOnPage); 
   };
 
   render() {
