@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { Component } from 'react';
-import { Overlay} from './Modal.styled';
+import { Overlay } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 export class ModalImg extends Component {
@@ -33,5 +33,5 @@ ModalImg.propTypes = {
   id: PropTypes.number,
   tags: PropTypes.string.isRequired,
   largeImageURL: PropTypes.string.isRequired,
-  onClose:PropTypes.func,
+  onClose: PropTypes.func,
 };

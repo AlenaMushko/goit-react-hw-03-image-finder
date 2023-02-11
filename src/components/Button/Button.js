@@ -12,3 +12,7 @@ export class LoadMore extends Component {
     );
   }
 }
+
+// LoadMore.propTypes = {
+//   onClick: propTypes.func,
+// };

@@ -1,12 +1,12 @@
 // import PropTypes from 'prop-types';
 import { Component } from 'react';
-import { ColorRing } from 'react-loader-spinner';
 
 import { Searchbar } from './Searchbar';
 import { fetchSearchImg } from './api';
 import { ImageGallery } from './ImageGallery';
 import { Container } from '../components/App.styled';
 import { LoadMore } from './Button';
+import { Loader } from './Loader';
 
 export class App extends Component {
   state = {
@@ -15,7 +15,7 @@ export class App extends Component {
     pageNumber: 1,
     isError: 'idle',
     isLoading: false,
-    imgsOnPage:0,
+    imgsOnPage: 0,
   };
 
   async componentDidUpdate(_, prevState) {
@@ -38,7 +38,7 @@ export class App extends Component {
         const imgs = await fetchSearchImg(searchValue, pageNumber);
         this.setState(state => ({ imgs: [...state.imgs, ...imgs] }));
         this.setState({ isLoading: false });
-          this.setState({ imgsOnPage: imgs.length });
+        this.setState({ imgsOnPage: imgs.length });
       }
     } catch (error) {
       this.setState({ isError: true, isLoading: false });
@@ -60,7 +60,7 @@ export class App extends Component {
     return (
       <Container>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        {isLoading && <ColorRing />}
+        {isLoading && <Loader />}
         {imgs.length > 1 && <ImageGallery items={this.state.imgs} />}
         {imgsOnPage >= 12 && <LoadMore onClick={this.onLoadMoreClick} />}
       </Container>

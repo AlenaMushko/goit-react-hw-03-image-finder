@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { FcSearch } from 'react-icons/fc';
 import PropTypes from 'prop-types';
-import { SearchBar,  SearchForm, SearchFormButton, SearchFormButtonLabel, SearchFormInput  } from './Searchbar.styled';
+import {
+  SearchBar,
+  SearchForm,
+  SearchFormButton,
+  SearchFormButtonLabel,
+  SearchFormInput,
+} from './Searchbar.styled';
 export class Searchbar extends Component {
-  state = { searchValue: '', pageNumber: 1, };
+  state = { searchValue: '', pageNumber: 1 };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -19,9 +25,12 @@ export class Searchbar extends Component {
   render() {
     return (
       <SearchBar>
-        < SearchForm onSubmit={this.handleSubmit}>
-          <SearchFormButton type="submit" className="button"><FcSearch style={{width:"2.5em", height:"2.5em"}}/>
-            <SearchFormButtonLabel className="button-label">Search</SearchFormButtonLabel>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit" className="button">
+            <FcSearch style={{ width: '2.5em', height: '2.5em' }} />
+            <SearchFormButtonLabel className="button-label">
+              Search
+            </SearchFormButtonLabel>
           </SearchFormButton>
 
           <SearchFormInput
@@ -33,11 +42,11 @@ export class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
           />
-        </ SearchForm>
+        </SearchForm>
       </SearchBar>
     );
   }
-};
+}
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func,
