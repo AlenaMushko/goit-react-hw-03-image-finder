@@ -9,6 +9,7 @@ import {
   SearchFormInput,
 } from './Searchbar.styled';
 export class Searchbar extends Component {
+  static propTypes = { onSubmit: PropTypes.func };
   state = { searchValue: '', pageNumber: 1 };
 
   handleSubmit = e => {
@@ -47,7 +48,3 @@ export class Searchbar extends Component {
     );
   }
 }
-
-Searchbar.propTypes = {
-  onSubmit: PropTypes.func,
-};

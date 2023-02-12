@@ -1,4 +1,3 @@
-// import PropTypes from 'prop-types';
 import { Component } from 'react';
 
 import { Searchbar } from './Searchbar';
@@ -7,48 +6,50 @@ import { ImageGallery } from './ImageGallery';
 import { Container } from '../components/App.styled';
 import { LoadMore } from './Button';
 import { Loader } from './Loader';
+import { Error } from './Error/error';
+import { NoImg } from './NoImg/NoImg';
+import { EndImg } from './EndImg/EndImg';
 
 export class App extends Component {
   state = {
     searchValue: '',
     imgs: [],
     pageNumber: 1,
-    isError: 'idle',
     isLoading: false,
     imgsOnPage: 0,
+    error: '',
+    isEmpty: false,
   };
 
   async componentDidUpdate(_, prevState) {
     const { searchValue, pageNumber } = this.state;
-    try {
-      if (prevState.searchValue !== this.state.searchValue) {
+    if (
+      prevState.searchValue !== this.state.searchValue ||
+      prevState.pageNumber !== this.state.pageNumber
+    ) {
+      try {
         this.setState({ isLoading: true });
         const imgs = await fetchSearchImg(searchValue, pageNumber);
-        this.setState({ imgs: imgs });
+        if (imgs.length < 1) {
+          this.setState({ isEmpty: true });
+          return;
+        }
+        this.setState(state => ({
+          imgs: [...state.imgs, ...imgs],
+          imgsOnPage: imgs.length,
+          isEmpty: false,
+        }));
+      } catch (error) {
+        this.setState({ error: error.message });
+        console.log(error);
+      } finally {
         this.setState({ isLoading: false });
-        this.setState({ imgsOnPage: imgs.length });
       }
-    } catch (error) {
-      this.setState({ isError: true, isLoading: false });
-      console.log(error);
-    }
-    try {
-      if (prevState.pageNumber !== this.state.pageNumber) {
-        this.setState({ isLoading: true });
-        const imgs = await fetchSearchImg(searchValue, pageNumber);
-        this.setState(state => ({ imgs: [...state.imgs, ...imgs] }));
-        this.setState({ isLoading: false });
-        this.setState({ imgsOnPage: imgs.length });
-      }
-    } catch (error) {
-      this.setState({ isError: true, isLoading: false });
-      console.log(error);
     }
   }
 
   handleFormSubmit = searchValue => {
-    this.setState({ searchValue: searchValue });
-    this.setState({ pageNumber: 1 });
+    this.setState({ searchValue: searchValue, pageNumber: 1, imgs: [] });
   };
 
   onLoadMoreClick = async () => {
@@ -56,13 +57,17 @@ export class App extends Component {
   };
 
   render() {
-    const { imgs, isLoading, imgsOnPage } = this.state;
+    const { imgs, isLoading, imgsOnPage, error, isEmpty, searchValue } =
+      this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.handleFormSubmit} />
         {isLoading && <Loader />}
-        {imgs.length > 1 && <ImageGallery items={this.state.imgs} />}
+        {imgs.length > 1 && <ImageGallery items={imgs} />}
         {imgsOnPage >= 12 && <LoadMore onClick={this.onLoadMoreClick} />}
+        {imgs.length > 1 && imgsOnPage < 12 && <EndImg />}
+        {isEmpty && <NoImg searchValue={searchValue} />}
+        {error && <Error />}
       </Container>
     );
   }
